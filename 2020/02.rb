@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-input=`xclip -o`
+input = `xclip -o`
 
 passwords = 0
 input.each_line(chomp: true) do |line|

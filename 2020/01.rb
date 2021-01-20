@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-input=`xclip -o`
+input = `xclip -o`
 
 lines = input.lines.map(&:to_i)
 
