@@ -39,8 +39,6 @@ puts "Answer1: #{seats.max}"
 list = (0..(ROW_MAX * (COL_MAX + 1))).to_a
 seats = list.reject {|id| seats.include?(id)}
 
-seats.reject! do |id|
-  seats.include?(id + 1) || seats.include?(id - 1)
-end
+seats.reject! {|id| seats.include?(id + 1) || seats.include?(id - 1)}
 puts "Answer2: #{seats.first}"
 
