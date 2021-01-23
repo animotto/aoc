@@ -1,9 +1,11 @@
 #!/usr/bin/env ruby
 
+require "set"
+
 input = $stdin.read
 
 x = y = 0
-houses = {"#{x}:#{y}" => 1}
+houses = Set.new
 input.each_char do |char|
   case char
   when "^"
@@ -15,47 +17,27 @@ input.each_char do |char|
   when "<"
     x -= 1
   end
-  k = "#{x}:#{y}"
-  houses[k] = 0 if houses[k].nil?
-  houses[k] += 1
+  houses.add([x, y])
 end
 puts "Answer1: #{houses.length}"
 
-sx = sy = 0
-rx = ry = 0
-houses = {"#{sx}:#{sy}" => 2}
-robo = false
-input.each_char do |char|
+coords = [[0, 0], [0, 0]]
+houses = Set.new
+input.chars.each_with_index do |char, i|
+  n = i % 2
+  x, y = coords[n]
   case char
   when "^"
-    if robo
-      ry += 1
-    else
-      sy += 1
-    end
+    y += 1
   when "v"
-    if robo
-      ry -= 1
-    else
-      sy -= 1
-    end
+    y -= 1
   when ">"
-    if robo
-      rx += 1
-    else
-      sx += 1
-    end
+    x += 1
   when "<"
-    if robo
-      rx -= 1
-    else
-      sx -= 1
-    end
+    x -= 1
   end
-  k = robo ? "#{rx}:#{ry}": "#{sx}:#{sy}"
-  houses[k] = 0 if houses[k].nil?
-  houses[k] += 1
-  robo = !robo
+  coords[n] = [x, y]
+  houses.add([x, y])
 end
 puts "Answer2: #{houses.length}"
 
