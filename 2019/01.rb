@@ -1,18 +1,19 @@
 #!/usr/bin/env ruby
 
-input = `xclip -o`
+input = $stdin.read
 
-fuel1 = 0
-input.each_line do |mass|
-  fuel1 += mass.to_i / 3 - 2
+sum = 0
+input.each_line(chomp: true) do |line|
+  sum += line.to_i / 3 - 2
 end
-puts "Answer 1: #{fuel1}"
+puts "Answer1: #{sum}"
 
-fuel2 = 0
-input.each_line do |mass|
-  f = mass.to_i
-  while (f = f / 3 - 2) > 0
-    fuel2 += f
+sum = 0
+input.each_line(chomp: true) do |line|
+  m = line.to_i
+  while (m = m / 3 - 2) > 0
+    sum += m
   end
 end
-puts "Answer 2: #{fuel2}"
+puts "Answer2: #{sum}"
+
