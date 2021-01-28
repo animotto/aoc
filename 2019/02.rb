@@ -1,48 +1,68 @@
 #!/usr/bin/env ruby
 
-def exec(prog)
-  i = 0
-  while i < prog.size do
-    case prog[i]
-    when 1
-      # puts "[#{prog[i + 3]}] = #{prog[prog[i + 1]]} + #{prog[prog[i + 2]]}"
-      prog[prog[i + 3]] = prog[prog[i + 1]] + prog[prog[i + 2]]
-      i += 4
-    when 2
-      # puts "[#{prog[i + 3]}] = #{prog[prog[i + 1]]} * #{prog[prog[i + 2]]}"
-      prog[prog[i + 3]] = prog[prog[i + 1]] * prog[prog[i + 2]]
-      i += 4
-    when 99
-      # puts "Program halts at #{i} position"
-      break
-    else
-      puts "Something wrong at #{i} position"
-      exit
-    end
+input = $stdin.read
+
+data = input.lines(chomp: true)
+prg = data[0].split(",").map(&:to_i)
+out = data[1].to_i
+
+ram = prg.clone
+ram[1] = 12
+ram[2] = 2
+ip = 0
+loop do
+  op = ram[ip]
+  a = ram[ip + 1]
+  b = ram[ip + 2]
+  c = ram[ip + 3]
+
+  case op
+  when 1
+    ram[c] = ram[a] + ram[b]
+  when 2
+    ram[c] = ram[a] * ram[b]
+  when 99
+    break
   end
+
+  ip += 4
 end
+puts "Answer1: #{ram[0]}"
 
-input = `xclip -o`
-prog = input.split(",")
-prog.map! {|i| i.to_i}
-
-prog1 = prog.dup
-prog1[1] = 12
-prog1[2] = 2
-exec(prog1)
-puts "Answer 1: #{prog1[0]}"
-
-prog2 = []
+MAX = 99
 noun = verb = 0
-catch :search do
-  for n in 0..99 do
-    for v in 0..99 do
-      prog2 = prog.dup
-      prog2[1] = noun = n
-      prog2[2] = verb = v
-      exec(prog2)
-      throw :search if prog2[0] == 19690720
+found = false
+MAX.times do |i|
+  break if found
+  MAX.times do |j|
+    ip = 0
+    ram = prg.clone
+    ram[1] = i
+    ram[2] = j
+    loop do
+      op = ram[ip]
+      a = ram[ip + 1]
+      b = ram[ip + 2]
+      c = ram[ip + 3]
+
+      case op
+      when 1
+        ram[c] = ram[a] + ram[b]
+      when 2
+        ram[c] = ram[a] * ram[b]
+      when 99
+        break
+      end
+
+      ip += 4
+    end
+
+    if ram[0] == out
+      noun, verb = i, j
+      found = true
+      break
     end
   end
 end
-puts "Answer 2: #{100 * noun + verb}"
+puts "Answer2: #{noun * 100 + verb}"
+
