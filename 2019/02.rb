@@ -1,5 +1,10 @@
 #!/usr/bin/env ruby
 
+OPS = {
+  1 => lambda {|a, b| a + b},
+  2 => lambda {|a, b| a * b},
+}
+
 input = $stdin.read
 
 data = input.lines(chomp: true)
@@ -15,16 +20,8 @@ loop do
   a = ram[ip + 1]
   b = ram[ip + 2]
   c = ram[ip + 3]
-
-  case op
-  when 1
-    ram[c] = ram[a] + ram[b]
-  when 2
-    ram[c] = ram[a] * ram[b]
-  when 99
-    break
-  end
-
+  break unless OPS.key?(op)
+  ram[c] = OPS[op].call(ram[a], ram[b])
   ip += 4
 end
 puts "Answer1: #{ram[0]}"
@@ -44,16 +41,8 @@ MAX.times do |i|
       a = ram[ip + 1]
       b = ram[ip + 2]
       c = ram[ip + 3]
-
-      case op
-      when 1
-        ram[c] = ram[a] + ram[b]
-      when 2
-        ram[c] = ram[a] * ram[b]
-      when 99
-        break
-      end
-
+      break unless OPS.key?(op)
+      ram[c] = OPS[op].call(ram[a], ram[b])
       ip += 4
     end
 
