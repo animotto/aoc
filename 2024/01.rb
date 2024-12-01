@@ -11,17 +11,10 @@ end
 
 left_list.sort!
 right_list.sort!
-
-total = 0
-left_list.each_with_index do |left, i|
-  total += (right_list[i] - left).abs
-end
-
+total = left_list.zip(right_list).sum { |e| (e[0] - e[1]).abs }
 puts(total)
 
-score = 0
-left_list.each do |left|
-  score += left * right_list.count(left)
-end
-
+freq_list = Hash.new(0)
+right_list.each { |e| freq_list[e] += 1 }
+score = left_list.sum { |e| e * freq_list[e] }
 puts(score)
